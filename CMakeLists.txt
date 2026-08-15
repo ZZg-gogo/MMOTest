@@ -30,5 +30,8 @@ message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 include(cmake/zzhOptions.cmake)
 
 # 项目模块 进入这些目录找对应的cmake文件
-add_subdirectory(common)
-add_subdirectory(aoi)
+add_subdirectory(game_server/common)
+add_subdirectory(game_server/aoi)
+#add_subdirectory(game_server/fight)
+add_subdirectory(game_server/unit)
+add_subdirectory(tests)
