@@ -148,6 +148,8 @@ public:
 		}
 	}
 
+	Watcher* GetWatcher(u_int64_t guid);
+	Marker* GetMarker(u_int64_t guid);
 private:
 	void OnEnter(u_int64_t guid, const Vec2& pos, u_int32_t range);
 	void OnLeave(u_int64_t guid);

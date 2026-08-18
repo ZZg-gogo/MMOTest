@@ -707,4 +707,27 @@ void TowerAoi::OnWatcherRemove(Watcher* watcher, TowerIndexList& watchTower)
 			}
 		}
 	}
+	
+}
+
+Watcher* TowerAoi::GetWatcher(u_int64_t guid)
+{
+	auto it = m_watchers.find(guid);
+	if (it != m_watchers.end())
+	{
+		return it->second;
+	}
+
+	return nullptr;
+}
+
+Marker* TowerAoi::GetMarker(u_int64_t guid)
+{
+	auto it = m_markers.find(guid);
+	if (it != m_markers.end())
+	{
+		return it->second;
+	}
+
+	return nullptr;
 }
