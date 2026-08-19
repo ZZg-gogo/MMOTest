@@ -4,6 +4,7 @@
 //存储着游戏内的相关定义
 
 #include <cstdint>
+#include "Vec2.h"
 
 enum class ObjectType : uint32_t
 {
@@ -85,7 +86,7 @@ enum class AttrID : uint32_t
     CRIT_HIT      = 13, //暴击
     CRIT_DEF      = 14, //抗暴
     CRIT_HURT     = 15, //暴伤
-    ATTR_NUM      = 16, //属性个数
+    COUNT         = 16, //属性个数
 };
 
 
@@ -120,6 +121,45 @@ enum class Camp : uint32_t
     PvpTeam5,
 };
 
+//玩家进入的消息
+struct ObjectEnterInfo
+{
+    uint64_t guid = 0;                  // 场景对象实例ID
+    uint32_t actorId = 0;               // 角色/怪物模板ID
+    uint32_t level = 1;                 // 等级
+
+    ObjectType objectType = ObjectType::NONE;
+    Camp camp = Camp::None;
+
+    ActionType action = ActionType::NONE;
+
+    Vec2 position{};                    // 位置
+    float rotation = 0.0f;              // 朝向
+
+    uint32_t hp = 0;                    // 当前生命
+    uint32_t mp = 0;                    // 当前魔法
+    uint32_t hpMax = 0;                 // 最大生命
+    uint32_t mpMax = 0;                 // 最大魔法
+
+    uint32_t speed = 0;                 // 移动速度
+};
+
+
+//玩家数据要更新的消息
+struct ObjectUpdateInfo
+{
+    uint64_t guid = 0;              // 对象实例ID
+
+    ActionType action = ActionType::NONE;
+
+    Vec2 position{};                // 当前坐标
+    float rotation = 0.0f;          // 当前朝向
+
+    uint32_t hp = 0;                // 当前生命
+    uint32_t mp = 0;                // 当前魔法
+
+    uint32_t speed = 0;             // 当前移动速度
+};
 
 
 #endif
