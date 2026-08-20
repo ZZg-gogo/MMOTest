@@ -44,7 +44,7 @@ foreach(TEST_SOURCE IN LISTS TEST_SOURCE_FILES)
         PRIVATE
             common
             aoi
-            unit
+            scene
             Threads::Threads
     )
 
