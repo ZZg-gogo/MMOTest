@@ -42,7 +42,7 @@ foreach(TEST_SOURCE IN LISTS TEST_SOURCE_FILES)
     # 链接需要测试的模块
     target_link_libraries(${TEST_NAME}
         PRIVATE
-            common
+            Common
             Threads::Threads
     )
 
