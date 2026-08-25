@@ -43,8 +43,6 @@ foreach(TEST_SOURCE IN LISTS TEST_SOURCE_FILES)
     target_link_libraries(${TEST_NAME}
         PRIVATE
             common
-            aoi
-            scene
             Threads::Threads
     )
 
