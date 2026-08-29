@@ -3,6 +3,12 @@
 
 #include <cstdint>
 #include <type_traits>
+#include <string>
+#include <set>
+#include <unordered_set>
+#include <deque>
+#include <vector>
+#include <list>
 
 // 游戏对象的基础类型 ID
 // 一个对象通常只有一个主要 TypeID
@@ -145,11 +151,11 @@ public:
 public:
     template<High16Guid type>
     static typename std::enable_if<ObjectGuidTraits<type>::Global, ObjectGuid>::type 
-        Create(High16Guid hi, uint32_t counter) {return Global(hi, counter);}
+        Create( uint32_t counter) {return Global(type, counter);}
 
     template<High16Guid type>
     static typename std::enable_if<ObjectGuidTraits<type>::MapSpecific, ObjectGuid>::type
-        Create(High16Guid hi, uint32_t entry, uint32_t counter) {return MapSpecific(hi, entry, counter);}
+        Create(uint32_t entry, uint32_t counter) {return MapSpecific(type, entry, counter);}
 
     void set(uint64_t guid) {m_guid = guid;}
     void clear() {m_guid = 0;}
@@ -172,6 +178,37 @@ public:
     }
 
     [[nodiscard]] uint32_t getMaxCounter(){return GetMaxCounter(getHigh());}
+
+    [[nodiscard]] bool isEmpty() const {return 0 == m_guid;}
+    [[nodiscard]] bool isCreature() const {return getHigh() == High16Guid::Unit;}
+    [[nodiscard]] bool isPet() const {return getHigh() == High16Guid::Pet;}
+    [[nodiscard]] bool isVehicle() const { return getHigh() == High16Guid::Vehicle; }
+    [[nodiscard]] bool isCreatureOrPet() const{ return isCreature() || isPet(); }
+    [[nodiscard]] bool isCreatureOrVehicle() const { return isCreature() || isVehicle(); }
+    [[nodiscard]] bool isAnyTypeCreature() const { return isCreature() || isPet() || isVehicle(); }
+    [[nodiscard]] bool isPlayer() const {return (!isEmpty()) && getHigh() == High16Guid::Player;}
+    //是否是场景单位对象
+    [[nodiscard]] bool isUnit() const { return isAnyTypeCreature() || isPlayer(); }
+    [[nodiscard]] bool isItem() const { return getHigh() == High16Guid::Item; }
+    [[nodiscard]] bool isGameObject()  const { return getHigh() == High16Guid::GameObject; }
+    [[nodiscard]] bool isDynamicObject() const { return getHigh() == High16Guid::DynamicObject; }
+    [[nodiscard]] bool isCorpse() const { return getHigh() == High16Guid::Corpse; }
+    [[nodiscard]] bool isTransport() const { return getHigh() == High16Guid::Transport; }
+    [[nodiscard]] bool isMOTransport() const { return getHigh() == High16Guid::Mo_Transport; }
+    //是不是场景物体类对象
+    [[nodiscard]] bool isAnyTypeGameObject() const { return isGameObject() || isTransport() || isMOTransport(); }
+    //根据具体的High16Guid获取大类型
+    static TypeID GetTypeId(High16Guid hi);
+    [[nodiscard]] TypeID getTypeId() {return GetTypeId(getHigh());}
+
+    bool operator==(const ObjectGuid& guid) {return getRawGuid() == guid.getRawGuid();}
+    bool operator!=(const ObjectGuid& guid) {return getRawGuid() != guid.getRawGuid();}
+    bool operator<(const ObjectGuid& guid) {return getRawGuid() < guid.getRawGuid();}
+    bool operator<=(const ObjectGuid& guid) {return getRawGuid() <= guid.getRawGuid();}
+
+    static std::string_view GetHighGuidName(High16Guid hi);
+    [[nodiscard]] std::string_view GetTypeName() const { return !isEmpty() ? GetHighGuidName(getHigh()) : "None";}
+    [[nodiscard]] std::string toString() const;
 private:
     //创造一个全局的guid
     static ObjectGuid Global(High16Guid hi, uint32_t counter);
@@ -182,6 +219,55 @@ private:
     [[nodiscard]] bool hasEntry() const{return hasEntry(getHigh());}
 private:
     uint64_t m_guid{0};
+};
+
+
+using ObjectGuidSet = std::set<ObjectGuid>;
+using ObjectGuidList = std::list<ObjectGuid>;
+using ObjectGuidDeque = std::deque<ObjectGuid>;
+using ObjectGuidVector = std::vector<ObjectGuid>;
+using ObjectGuidUnorderedSet = std::unordered_set<ObjectGuid>;
+
+
+
+//guid生成基类
+class ObjectGuidGeneratorBase
+{
+public:
+    ObjectGuidGeneratorBase(uint32_t nextCounter) : m_nextCounter(static_cast<uint64_t>(nextCounter))
+    {}
+
+    virtual void set(uint32_t nextCounter) {m_nextCounter = static_cast<uint64_t>(nextCounter);}
+    virtual uint32_t Generator() = 0;
+    [[nodiscard]] uint32_t getNextAfterMaxUsed() const {return static_cast<uint32_t>(m_nextCounter);}
+    virtual ~ObjectGuidGeneratorBase() = default;
+protected:
+    static void HandleCounterOverflow(High16Guid hi);
+    uint64_t m_nextCounter;  //下一个可以使用的counter
+};
+
+
+
+
+template<High16Guid high>
+class ObjectGuidGenerator : public ObjectGuidGeneratorBase
+{
+public:
+    explicit ObjectGuidGenerator(uint32_t start = 1)
+        : ObjectGuidGeneratorBase(start)
+    {}
+
+
+    uint32_t Generator() override
+    {
+        if (static_cast<uint64_t>(ObjectGuid::GetMaxCounter(high)) < m_nextCounter)
+        {
+            HandleCounterOverflow(high);
+        }
+        
+        return static_cast<uint32_t>(m_nextCounter++);
+    }
+
 };
 
 

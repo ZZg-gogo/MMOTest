@@ -19,4 +19,5 @@ target_include_directories(Entities
 target_link_libraries(Entities
     PRIVATE
         zzh_options
+        Logger
 )

@@ -5,6 +5,9 @@ project(MMOTest
     LANGUAGES CXX C
 )
 
+# 查找 spdlog
+find_package(spdlog CONFIG REQUIRED)
+
 # C++ 标准
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -31,4 +34,5 @@ include(cmake/zzhOptions.cmake)
 
 # 项目模块 进入这些目录找对应的cmake文件
 add_subdirectory(GameServer/Entities)
+add_subdirectory(GameServer/Logger)
 add_subdirectory(tests)
