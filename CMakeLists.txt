@@ -33,6 +33,7 @@ message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 include(cmake/zzhOptions.cmake)
 
 # 项目模块 进入这些目录找对应的cmake文件
+add_subdirectory(GameServer/Common)
 add_subdirectory(GameServer/Entities)
 add_subdirectory(GameServer/Logger)
 add_subdirectory(tests)
