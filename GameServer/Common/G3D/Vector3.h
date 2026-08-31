@@ -13,6 +13,7 @@ public:
     Vector3();  
     Vector3(float x, float y, float z);
     Vector3(const Vector3& vec3);
+    Vector3& operator=(const Vector3& other);
 
     const float& operator[](int i) const;
     float& operator[](int i);
@@ -37,7 +38,7 @@ public:
     //是否已经被归一化了
     bool isUnit() const;
 
-    //TODO
+    
     //向着目标点最多移动maxTranslation的距离
     Vector3 movedTowards(const Vector3& goal, float maxTranslation) const;
     void moveTowards(const Vector3& goal, float maxTranslation);
@@ -64,9 +65,8 @@ public:
     Vector3&  operator*= (const Vector3& v);
     Vector3&  operator/= (const Vector3& v);
 
-    float length() const;
     //向量的模长
-    float magnitude() const;
+    float length() const;
 
     Vector3 pow(float p) const 
     {
@@ -78,18 +78,18 @@ public:
     //单位方向向量
     inline Vector3 directionOrZero() const 
     {
-        float mag = magnitude();    //得到长度
-        if (mag < 0.0000001f)
+        float len = length();    //得到长度
+        if (len < 0.0000001f)
         {
             return Vector3::Zero();
         }
-        else if (mag < 1.00001f && mag > 0.99999f)
+        else if (len < 1.00001f && len > 0.99999f)
         {
             return *this;
         }
         else
         {
-            return *this * (1.0f / mag);
+            return *this * (1.0f / len);
         }
     }
     //单位向量
