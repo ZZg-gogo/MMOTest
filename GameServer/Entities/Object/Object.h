@@ -43,6 +43,20 @@ public:
     virtual void setDynamicFlags(uint32_t flag) {replaceAllDynamicFlags(flag | getDynamicFlags());}
     virtual void removeDynamicFlag(uint32_t flag) { replaceAllDynamicFlags(getDynamicFlags() & ~flag); }
     virtual void replaceAllDynamicFlags([[maybe_unused]] uint32_t flag) { }
+
+    [[nodiscard]] TypeID getTypeID() {return m_objectTypeId;}
+    //m_objectType是TypeMask位或出来的结果
+    [[nodiscard]] bool isType(uint16_t mask) {return mask&m_objectType;}
+
+    //清理字段更新标记 remove=true表示还要从Map中移除这个对象的更新标记
+    void clearUpdateMask(bool remove);
+    
+
+    virtual void addToObjectUpdate() = 0;
+    virtual void removeFromObjectUpdate() = 0;
+    //玩家在世界里面 并且是有字段第一次被更新 那么就记录到世界更新队列
+    void addToObjectUpdateIfNeeded();
+
 public:
     [[nodiscard]] static ObjectGuid GetGuid(const Object* obj);
 
@@ -69,7 +83,7 @@ protected:
     uint16_t _fieldNotifyFlags;//管理属性字段是否要强制推送(无论值改没改变)
 
 private:
-    [[nodiscard]] bool PrintIndexError(uint32_t index, bool set) const;
+    [[nodiscard]] bool printIndexError(uint32_t index, bool set) const;
     Object(const Object& o) = delete;
     Object& operator=(const Object& o) =delete;
     Object(Object&& o) = delete;

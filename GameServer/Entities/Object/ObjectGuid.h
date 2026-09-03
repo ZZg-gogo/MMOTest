@@ -37,7 +37,7 @@ enum class TypeID
 
 // 游戏对象类型掩码
 // 可以通过按位或（|）组合多个类型
-enum class TypeMask
+enum TypeMask
 {
     TYPEMASK_OBJECT         = 0x0001, // 基础对象类型
 
