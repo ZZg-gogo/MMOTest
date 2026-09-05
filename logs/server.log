@@ -1,4 +1,7 @@
-[2026-08-30 00:35:29.967] [server] [info] 测试一下简单封装的logger 10
-[2026-08-30 00:35:29.967] [server] [info] 开始测试生成counter
-[2026-08-30 00:35:30.088] [server] [error] HandleCounterOverflow Pet
-[2026-08-30 00:36:05.939] [server] [error] HandleCounterOverflow Player
+[2026-09-06 00:09:46.593] [server] [info] numnumnumnumnum = 256
+[2026-09-06 00:09:46.593] [server] [info] ppppp num = 0
+[2026-09-06 00:09:46.593] [server] [info] ppppp num = 1
+[2026-09-06 00:09:46.593] [server] [info] num1num1num1 = 1
+[2026-09-06 00:09:46.593] [server] [info] num1num1num1 = 256
+[2026-09-06 00:09:46.593] [server] [info] numnumnumnumnum = 256
+[2026-09-06 00:09:46.593] [server] [info] numnumnumnumnum = 1
