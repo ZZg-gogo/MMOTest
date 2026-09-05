@@ -45,6 +45,7 @@ bool ObjectGuid::hasEntry(High16Guid hi)
         case High16Guid::Unit:
         case High16Guid::Pet:
         case High16Guid::Vehicle:
+            return true;
         default:
             return true;
     }

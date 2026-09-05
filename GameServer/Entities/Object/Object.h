@@ -2,9 +2,9 @@
 #define __OBJECT_H__
 
 #include <cstdint>
-#include "UpdateMask.h"
+#include <Update/UpdateMask.h>
+#include <Update/UpdateFields.h>
 #include "ObjectGuid.h"
-#include "UpdateFields.h"
 
 //对象的抽象基类
 class Object
@@ -83,7 +83,7 @@ protected:
     uint16_t _fieldNotifyFlags;//管理属性字段是否要强制推送(无论值改没改变)
 
 private:
-    [[nodiscard]] bool printIndexError(uint32_t index, bool set) const;
+    bool printIndexError(uint32_t index, bool set) const;
     Object(const Object& o) = delete;
     Object& operator=(const Object& o) =delete;
     Object(Object&& o) = delete;

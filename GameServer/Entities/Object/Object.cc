@@ -1,5 +1,5 @@
 #include "Object.h"
-#include "Logger/Logger.h"
+#include <Logger.h>
 
 
 void Object::addToWorld()
@@ -45,7 +45,7 @@ void Object::clearUpdateMask(bool remove)
 
 uint32_t Object::getUint32Value(uint16_t index) const
 {
-    if (index < 0 || index > m_valuesCount)
+    if (index == m_valuesCount)
     {
         printIndexError(index, false);
         return 0;
@@ -58,7 +58,7 @@ uint32_t Object::getUint32Value(uint16_t index) const
 
 void Object::setUint32Value(uint16_t index, uint32_t value)
 {
-    if (index < 0 || index > m_valuesCount)
+    if (index == m_valuesCount)
     {
         printIndexError(index, true);
         return;
@@ -66,7 +66,7 @@ void Object::setUint32Value(uint16_t index, uint32_t value)
 
     if (m_uint32Values[index] != value)
     {
-        m_uint32Values[index] == value;
+        m_uint32Values[index] = value;
         m_updateMask.setBit(index);
         addToObjectUpdateIfNeeded();
     }
@@ -75,10 +75,10 @@ void Object::setUint32Value(uint16_t index, uint32_t value)
 
 float Object::getFloatValue(uint16_t index) const
 {
-    if (index < 0 || index > m_valuesCount)
+    if (index == m_valuesCount)
     {
         printIndexError(index, false);
-        return;
+        return 0.0;
     }
 
     return m_floatValues[index];
@@ -87,7 +87,7 @@ float Object::getFloatValue(uint16_t index) const
 
 void Object::setFloatValue(uint16_t index, float value)
 {
-    if (index < 0 || index > m_valuesCount)
+    if (index == m_valuesCount)
     {
         printIndexError(index, false);
         return;
